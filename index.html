@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy 1 Year Anniversary 💖</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;700&family=Nanum+Pen+Script&family=Gowun+Batang:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --pink: #ff6b8a;
+            --soft-pink: #ffd4e0;
+            --cream: #fff9f0;
+            --warm-brown: #8b6f5e;
+            --dark: #1a1a2e;
+        }
+
+        body, html {
+            width: 100%; height: 100%;
+            background: #000;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* ===== SCREENS ===== */
+        .screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; pointer-events: none; z-index: 1;
+            transition: opacity 0.8s ease;
+        }
+        .screen.active { opacity: 1; pointer-events: auto; z-index: 10; }
+
+        /* ===== 0. START SCREEN ===== */
+        #start-screen {
+            background: radial-gradient(ellipse at center, #1a1a3e 0%, #0a0a1a 100%);
+            color: white;
+        }
+        #start-screen h2 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(24px, 5vw, 42px);
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeUp 1.5s ease 0.5s forwards;
+        }
+        .start-btn {
+            padding: 18px 45px;
+            font-size: clamp(16px, 3vw, 22px);
+            font-family: 'Dancing Script', cursive;
+            background: linear-gradient(135deg, var(--pink), #ff8fab);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(255,107,138,0.4), 0 5px 20px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeUp 1.5s ease 1s forwards;
+        }
+        .start-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 50px rgba(255,107,138,0.6), 0 8px 30px rgba(0,0,0,0.3);
+        }
+        .start-sparkles {
+            position: absolute; width: 100%; height: 100%; pointer-events: none; overflow: hidden;
+        }
+        .sparkle {
+            position: absolute;
+            width: 4px; height: 4px;
+            background: white;
+            border-radius: 50%;
+            animation: sparkleFloat linear infinite;
+        }
+
+        /* ===== 1. VRCHAT INTRO ===== */
+        #vrchat-screen {
+            background: radial-gradient(ellipse at bottom, #16213e 0%, #0a0a1a 70%);
+            overflow: hidden;
+        }
+        .vrc-stars-container {
+            position: absolute; width: 100%; height: 100%; overflow: hidden;
+        }
+        .vrc-star {
+            position: absolute;
+            width: 2px; height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite;
+        }
+        .vrc-loading-bar {
+            width: 300px; max-width: 80%;
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 30px;
+        }
+        .vrc-loading-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #00ffcc);
+            border-radius: 10px;
+            transition: width 0.3s ease;
+        }
+        .vrc-title {
+            font-size: clamp(28px, 6vw, 56px);
+            font-weight: 700;
+            background: linear-gradient(135deg, #00d4ff, #00ffcc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: none;
+            margin-bottom: 10px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.3s forwards;
+        }
+        .vrc-subtitle {
+            color: rgba(255,255,255,0.6);
+            font-size: clamp(14px, 2.5vw, 18px);
+            opacity: 0;
+            animation: fadeUp 1s ease 0.6s forwards;
+        }
+
+        /* VRChat Avatars */
+        .vrc-avatars {
+            display: flex;
+            gap: 60px;
+            margin-top: 40px;
+            opacity: 0;
+            animation: fadeUp 1s ease 1s forwards;
+        }
+        .vrc-avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+        .vrc-avatar-body {
+            width: 100px;
+            height: 140px;
+            position: relative;
+            animation: avatarFloat 3s ease-in-out infinite;
+        }
+        .vrc-avatar-body:nth-child(1) { animation-delay: 0s; }
+        .vrc-avatar-body:nth-child(2) { animation-delay: 1.5s; }
+        .vrc-avatar-name {
+            color: rgba(255,255,255,0.8);
+            font-family: 'Caveat', cursive;
+            font-size: 20px;
+        }
+        .avatar-head {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            position: absolute;
+            top: 0; left: 50%; transform: translateX(-50%);
+        }
+        .avatar-body-shape {
+            width: 60px; height: 70px;
+            border-radius: 30px 30px 20px 20px;
+            position: absolute;
+            top: 40px; left: 50%; transform: translateX(-50%);
+        }
+        .avatar-legs {
+            position: absolute;
+            top: 100px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 8px;
+        }
+        .avatar-leg {
+            width: 12px; height: 30px;
+            border-radius: 0 0 6px 6px;
+        }
+        .avatar-arms {
+            position: absolute;
+            top: 50px; left: 50%; transform: translateX(-50%);
+            width: 90px;
+            display: flex; justify-content: space-between;
+        }
+        .avatar-arm {
+            width: 10px; height: 40px;
+            border-radius: 5px;
+        }
+        /* Alessia avatar - orange hair, green eyes */
+        .alessia .avatar-head { background: #ffcc99; }
+        .alessia .avatar-head::before {
+            content: '';
+            position: absolute; top: -8px; left: -5px;
+            width: 60px; height: 40px;
+            background: #ff8c42;
+            border-radius: 30px 30px 10px 10px;
+        }
+        .alessia .avatar-head::after {
+            content: ''; position: absolute;
+            top: 18px; left: 10px;
+            width: 30px; height: 10px;
+            background: transparent;
+            border-bottom: 3px solid #333;
+            border-radius: 0 0 50% 50%;
+        }
+        .alessia .avatar-body-shape { background: linear-gradient(to bottom, #ff6b8a, #ff8fab); }
+        .alessia .avatar-leg { background: #555; }
+        .alessia .avatar-arm { background: #ffcc99; }
+        .alessia .avatar-eyes {
+            position: absolute; top: 22px; left: 12px;
+            width: 26px; display: flex; justify-content: space-between; z-index: 2;
+        }
+        .alessia .avatar-eye {
+            width: 8px; height: 8px;
+            background: #2ecc71; border-radius: 50%;
+            box-shadow: inset -2px -1px 0 #27ae60;
+        }
+        /* Hair flowing down */
+        .alessia .avatar-hair-long {
+            position: absolute; top: 20px; left: -8px;
+            width: 66px; height: 50px;
+            background: #ff8c42;
+            border-radius: 0 0 30px 30px;
+            z-index: -1;
+        }
+
+        /* DongGeun avatar - Korean guy */
+        .donggeun .avatar-head { background: #f5d6b8; }
+        .donggeun .avatar-head::before {
+            content: '';
+            position: absolute; top: -6px; left: 0px;
+            width: 50px; height: 30px;
+            background: #2c2c2c;
+            border-radius: 25px 25px 5px 5px;
+        }
+        .donggeun .avatar-head::after {
+            content: ''; position: absolute;
+            top: 18px; left: 12px;
+            width: 26px; height: 8px;
+            background: transparent;
+            border-bottom: 3px solid #333;
+            border-radius: 0 0 50% 50%;
+        }
+        .donggeun .avatar-body-shape { background: linear-gradient(to bottom, #4a90d9, #357abd); }
+        .donggeun .avatar-leg { background: #444; }
+        .donggeun .avatar-arm { background: #f5d6b8; }
+        .donggeun .avatar-eyes {
+            position: absolute; top: 22px; left: 13px;
+            width: 24px; display: flex; justify-content: space-between; z-index: 2;
+        }
+        .donggeun .avatar-eye {
+            width: 7px; height: 5px;
+            background: #2c2c2c; border-radius: 50%;
+        }
+
+        .vrc-heart {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0;
+            animation: heartFloat 2s ease forwards;
+        }
+
+        /* ===== 2. FLIGHT MAP ===== */
+        #map-screen {
+            background: linear-gradient(180deg, #1a1a3e 0%, #16213e 40%, #1a3a5c 100%);
+        }
+        .map-container {
+            width: 90%; max-width: 800px;
+            position: relative;
+        }
+        .map-title {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(22px, 4vw, 36px);
+            text-align: center;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeUp 1s ease 0.3s forwards;
+        }
+        .map-svg-wrap {
+            width: 100%;
+            aspect-ratio: 2 / 1;
+            position: relative;
+        }
+        .map-svg-wrap svg { width: 100%; height: 100%; }
+        .flight-path {
+            stroke: var(--pink);
+            stroke-width: 2;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            fill: none;
+            filter: drop-shadow(0 0 4px rgba(255,107,138,0.6));
+        }
+        .flight-path.animate {
+            animation: drawPath 3s ease forwards;
+        }
+        .plane-icon {
+            font-size: 28px;
+            filter: drop-shadow(0 0 8px rgba(255,255,255,0.5));
+            offset-path: path('M 200 180 Q 400 80 600 160');
+            offset-distance: 0%;
+            animation: none;
+        }
+        .plane-icon.animate {
+            animation: flyPlane 3s ease forwards;
+        }
+        .map-label {
+            fill: white;
+            font-family: 'Caveat', cursive;
+            font-size: 18px;
+        }
+        .map-dot {
+            r: 6;
+            fill: var(--pink);
+            filter: drop-shadow(0 0 6px rgba(255,107,138,0.8));
+        }
+        .map-dot.pulse { animation: pulseDot 1s ease infinite; }
+
+        /* ===== 3. CAMERA FLASH ===== */
+        #flash-screen {
+            background: white;
+            z-index: 999;
+        }
+
+        /* ===== 4. MAIN CONTENT ===== */
+        #main-screen {
+            background: var(--cream);
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: block;
+        }
+        .main-bg-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image:
+                radial-gradient(circle at 20% 50%, rgba(255,107,138,0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255,182,193,0.05) 0%, transparent 50%),
+                radial-gradient(circle at 50% 80%, rgba(255,218,185,0.04) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Floating hearts background */
+        .floating-hearts {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 0; overflow: hidden;
+        }
+        .float-heart {
+            position: absolute;
+            color: rgba(255,107,138,0.08);
+            font-size: 20px;
+            animation: floatUp linear infinite;
+        }
+
+        /* Section container */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            padding: 0 20px;
+            padding-bottom: 120px;
+        }
+
+        /* Anniversary header */
+        .anniversary-header {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+        .anniversary-header h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(32px, 7vw, 60px);
+            color: var(--pink);
+            margin-bottom: 10px;
+        }
+        .anniversary-header .date {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(18px, 3vw, 26px);
+            color: var(--warm-brown);
+        }
+        .header-line {
+            width: 120px; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--pink), transparent);
+            margin: 20px auto;
+        }
+
+        /* ===== POLAROID PHOTOS ===== */
+        .polaroid-section {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding: 40px 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .polaroid {
+            background: white;
+            padding: 12px 12px 45px 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.1);
+            transform: rotate(var(--rotation, 0deg));
+            transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+            cursor: pointer;
+            opacity: 0;
+            position: relative;
+        }
+        .polaroid.visible {
+            animation: polaroidPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.08) translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+            z-index: 20;
+        }
+        .polaroid img {
+            width: clamp(200px, 30vw, 280px);
+            height: clamp(200px, 30vw, 280px);
+            object-fit: cover;
+            display: block;
+        }
+        .polaroid-caption {
+            text-align: center;
+            font-family: 'Caveat', cursive;
+            font-size: clamp(16px, 2.5vw, 22px);
+            color: #555;
+            margin-top: 10px;
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            width: 100%;
+        }
+        .tape {
+            position: absolute;
+            width: 60px; height: 20px;
+            background: rgba(255, 236, 179, 0.7);
+            top: -10px;
+            left: 50%; transform: translateX(-50%) rotate(var(--tape-rotation, 0deg));
+            z-index: 2;
+        }
+
+        /* ===== FILM STRIP VIDEO ===== */
+        .film-section {
+            max-width: 700px;
+            margin: 60px auto;
+            padding: 0 20px;
+            text-align: center;
+        }
+        .film-section-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(24px, 4vw, 36px);
+            color: var(--warm-brown);
+            margin-bottom: 30px;
+        }
+        .film-strip-container {
+            background: #111;
+            padding: 25px 20px;
+            border-radius: 8px;
+            position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 1s ease;
+        }
+        .film-strip-container.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Film sprocket holes */
+        .film-strip-container::before,
+        .film-strip-container::after {
+            content: '';
+            position: absolute;
+            top: 0; width: 20px; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent 0px,
+                transparent 10px,
+                #333 10px,
+                #333 12px,
+                transparent 12px,
+                transparent 25px
+            );
+        }
+        .film-strip-container::before { left: 0; }
+        .film-strip-container::after { right: 0; }
+        .film-strip-container video {
+            width: 100%;
+            max-width: 500px;
+            border: 3px solid #333;
+            border-radius: 2px;
+        }
+        .film-label {
+            color: rgba(255,255,255,0.6);
+            font-family: 'Caveat', cursive;
+            font-size: 18px;
+            margin-top: 15px;
+        }
+
+        /* ===== HANDWRITTEN LETTER ===== */
+        .letter-section {
+            max-width: 700px;
+            margin: 80px auto;
+            padding: 0 20px;
+        }
+        .letter-container {
+            background: linear-gradient(to bottom, #fffdf5, #fef9e7);
+            padding: clamp(30px, 5vw, 50px);
+            border-radius: 3px;
+            box-shadow:
+                0 2px 4px rgba(0,0,0,0.1),
+                0 15px 40px rgba(0,0,0,0.12),
+                inset 0 0 60px rgba(255,250,240,0.5);
+            position: relative;
+            overflow: hidden;
+        }
+        /* Paper texture lines */
+        .letter-container::before {
+            content: '';
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                transparent,
+                transparent 38px,
+                rgba(200,200,200,0.3) 38px,
+                rgba(200,200,200,0.3) 39px
+            );
+            pointer-events: none;
+        }
+        /* Red margin line */
+        .letter-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 60px;
+            width: 2px; height: 100%;
+            background: rgba(255,100,100,0.2);
+            pointer-events: none;
+        }
+        .letter-text {
+            font-family: 'Gowun Batang', 'Nanum Pen Script', serif;
+            font-size: clamp(18px, 2.5vw, 22px);
+            line-height: 2;
+            color: #2a2a2a;
+            position: relative;
+            z-index: 1;
+            white-space: pre-wrap;
+        }
+        .letter-text .char {
+            opacity: 0;
+            display: inline;
+            transition: opacity 0.05s ease;
+        }
+        .letter-text .char.visible {
+            opacity: 1;
+        }
+        .letter-signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(24px, 4vw, 32px);
+            color: var(--pink);
+            text-align: right;
+            margin-top: 20px;
+        }
+
+        /* ===== SECRET HEARTS ===== */
+        .secret-heart-btn {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            font-size: 30px;
+            transition: transform 0.3s ease;
+            animation: gentlePulse 2s ease-in-out infinite;
+            background: none;
+            border: none;
+        }
+        .secret-heart-btn:hover {
+            transform: scale(1.3);
+        }
+        .hearts-section {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            padding: 40px 20px;
+            flex-wrap: wrap;
+        }
+        .heart-message {
+            background: white;
+            padding: 15px 25px;
+            border-radius: 20px;
+            box-shadow: 0 5px 20px rgba(255,107,138,0.2);
+            font-family: 'Caveat', cursive;
+            font-size: 20px;
+            color: var(--pink);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+            max-width: 300px;
+            text-align: center;
+        }
+        .heart-message.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ===== MUSIC PLAYER ===== */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .music-toggle {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--soft-pink);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 4px 15px rgba(255,107,138,0.2);
+            transition: all 0.3s ease;
+        }
+        .music-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(255,107,138,0.3);
+        }
+        .music-toggle.playing {
+            animation: musicPulse 1s ease infinite;
+        }
+        .music-bars {
+            display: flex;
+            gap: 3px;
+            align-items: flex-end;
+            height: 20px;
+        }
+        .music-bar {
+            width: 3px;
+            background: var(--pink);
+            border-radius: 2px;
+            transition: height 0.2s ease;
+        }
+        .music-toggle.playing .music-bar {
+            animation: musicBarAnim 0.8s ease-in-out infinite;
+        }
+        .music-toggle.playing .music-bar:nth-child(1) { animation-delay: 0s; }
+        .music-toggle.playing .music-bar:nth-child(2) { animation-delay: 0.15s; }
+        .music-toggle.playing .music-bar:nth-child(3) { animation-delay: 0.3s; }
+        .music-toggle.playing .music-bar:nth-child(4) { animation-delay: 0.45s; }
+
+        /* ===== HIDDEN GIFT ===== */
+        .gift-trigger {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .gift-btn {
+            background: linear-gradient(135deg, var(--pink), #ff8fab);
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 50px;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(18px, 3vw, 24px);
+            cursor: pointer;
+            box-shadow: 0 8px 30px rgba(255,107,138,0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .gift-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 40px rgba(255,107,138,0.4);
+        }
+        .gift-btn::after {
+            content: '';
+            position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 50%, transparent 60%);
+            animation: shimmer 3s ease infinite;
+        }
+
+        /* Gift overlay */
+        .gift-overlay {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0);
+            z-index: 200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            transition: background 0.5s ease;
+        }
+        .gift-overlay.active {
+            background: rgba(0,0,0,0.92);
+            pointer-events: auto;
+        }
+        .gift-image-wrap {
+            max-width: 90vw;
+            max-height: 85vh;
+            transform: scale(0) rotate(-10deg);
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .gift-overlay.active .gift-image-wrap {
+            transform: scale(1) rotate(0deg);
+        }
+        .gift-image-wrap img {
+            max-width: 90vw;
+            max-height: 80vh;
+            object-fit: contain;
+            border: 12px solid white;
+            border-radius: 4px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .gift-close {
+            position: absolute;
+            top: -15px; right: -15px;
+            width: 40px; height: 40px;
+            background: white;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+            transition: transform 0.2s ease;
+        }
+        .gift-close:hover { transform: scale(1.1); }
+        .gift-label {
+            color: white;
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(20px, 4vw, 32px);
+            text-align: center;
+            margin-top: 20px;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.5s;
+        }
+        .gift-overlay.active .gift-label { opacity: 1; }
+
+        /* Confetti particles for gift reveal */
+        .confetti {
+            position: fixed;
+            width: 10px; height: 10px;
+            z-index: 201;
+            pointer-events: none;
+            animation: confettiFall linear forwards;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+        @keyframes avatarFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        @keyframes heartFloat {
+            0% { opacity: 0; transform: translateY(0) scale(0); }
+            30% { opacity: 1; transform: translateY(-20px) scale(1); }
+            100% { opacity: 0; transform: translateY(-80px) scale(0.5); }
+        }
+        @keyframes drawPath {
+            to { stroke-dashoffset: 0; }
+        }
+        @keyframes flyPlane {
+            to { offset-distance: 100%; }
+        }
+        @keyframes pulseDot {
+            0%, 100% { r: 6; opacity: 1; }
+            50% { r: 10; opacity: 0.6; }
+        }
+        @keyframes polaroidPop {
+            0% { opacity: 0; transform: rotate(var(--rotation, 0deg)) scale(0) translateY(50px); }
+            60% { transform: rotate(var(--rotation, 0deg)) scale(1.05) translateY(-5px); }
+            100% { opacity: 1; transform: rotate(var(--rotation, 0deg)) scale(1) translateY(0); }
+        }
+        @keyframes gentlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+        @keyframes musicPulse {
+            0%, 100% { box-shadow: 0 4px 15px rgba(255,107,138,0.2); }
+            50% { box-shadow: 0 4px 25px rgba(255,107,138,0.5); }
+        }
+        @keyframes musicBarAnim {
+            0%, 100% { height: 4px; }
+            50% { height: 18px; }
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-20px) rotate(360deg); opacity: 0; }
+        }
+        @keyframes sparkleFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100vh) scale(0); opacity: 0; }
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(-20vh) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
+        @keyframes letterCursorBlink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* ===== SCROLL INDICATOR ===== */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 50;
+            opacity: 0;
+            transition: opacity 1s ease;
+            pointer-events: none;
+        }
+        .scroll-indicator.show {
+            opacity: 1;
+            animation: scrollBounce 2s ease infinite;
+        }
+        .scroll-indicator span {
+            color: var(--warm-brown);
+            font-family: 'Caveat', cursive;
+            font-size: 16px;
+        }
+        @keyframes scrollBounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(8px); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .polaroid img {
+                width: 150px !important;
+                height: 150px !important;
+            }
+            .vrc-avatars { gap: 30px; }
+            .vrc-avatar-body { width: 70px; height: 100px; }
+            .avatar-head { width: 36px; height: 36px; }
+            .avatar-body-shape { width: 44px; height: 50px; top: 30px; }
+            .avatar-legs { top: 72px; }
+            .avatar-leg { width: 10px; height: 22px; }
+            .avatar-arms { top: 38px; width: 65px; }
+            .avatar-arm { width: 8px; height: 30px; }
+            .alessia .avatar-head::before { width: 44px; height: 30px; top: -6px; left: -4px; }
+            .alessia .avatar-hair-long { width: 50px; height: 35px; left: -5px; }
+            .alessia .avatar-eyes { top: 16px; left: 9px; width: 18px; }
+            .alessia .avatar-eye { width: 6px; height: 6px; }
+            .donggeun .avatar-head::before { width: 36px; height: 22px; }
+            .donggeun .avatar-eyes { top: 16px; left: 10px; width: 16px; }
+            .donggeun .avatar-eye { width: 5px; height: 4px; }
+            .letter-container { padding: 25px 20px; }
+            .letter-container::after { left: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===== AUDIO ===== -->
+    <audio id="bg-music" src="our-song.mp3" loop preload="auto"></audio>
+    <audio id="vrchat-sound" src="vrchat-theme.mp3" preload="auto"></audio>
+
+    <!-- ===== 0. START SCREEN ===== -->
+    <div id="start-screen" class="screen active">
+        <div class="start-sparkles" id="start-sparkles"></div>
+        <h2>Are you ready for our journey? &#10084;</h2>
+        <button class="start-btn" onclick="startJourney()">Click to Begin</button>
+    </div>
+
+    <!-- ===== 1. VRCHAT INTRO ===== -->
+    <div id="vrchat-screen" class="screen">
+        <div class="vrc-stars-container" id="vrc-stars"></div>
+        <div class="vrc-title">VRChat</div>
+        <div class="vrc-subtitle">Where it all started...</div>
+        <div class="vrc-avatars">
+            <!-- Alessia - Orange hair, green eyes -->
+            <div class="vrc-avatar">
+                <div class="vrc-avatar-body alessia">
+                    <div class="avatar-head">
+                        <div class="avatar-eyes">
+                            <div class="avatar-eye"></div>
+                            <div class="avatar-eye"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-hair-long"></div>
+                    <div class="avatar-body-shape"></div>
+                    <div class="avatar-arms">
+                        <div class="avatar-arm"></div>
+                        <div class="avatar-arm"></div>
+                    </div>
+                    <div class="avatar-legs">
+                        <div class="avatar-leg"></div>
+                        <div class="avatar-leg"></div>
+                    </div>
+                </div>
+                <div class="vrc-avatar-name">Alessia</div>
+            </div>
+
+            <!-- DongGeun - Korean guy -->
+            <div class="vrc-avatar">
+                <div class="vrc-avatar-body donggeun">
+                    <div class="avatar-head">
+                        <div class="avatar-eyes">
+                            <div class="avatar-eye"></div>
+                            <div class="avatar-eye"></div>
+                        </div>
+                    </div>
+                    <div class="avatar-body-shape"></div>
+                    <div class="avatar-arms">
+                        <div class="avatar-arm"></div>
+                        <div class="avatar-arm"></div>
+                    </div>
+                    <div class="avatar-legs">
+                        <div class="avatar-leg"></div>
+                        <div class="avatar-leg"></div>
+                    </div>
+                </div>
+                <div class="vrc-avatar-name">DongGeun</div>
+            </div>
+        </div>
+        <div class="vrc-loading-bar">
+            <div class="vrc-loading-fill" id="vrc-loading"></div>
+        </div>
+    </div>
+
+    <!-- ===== 2. FLIGHT MAP ===== -->
+    <div id="map-screen" class="screen">
+        <div class="map-container">
+            <div class="map-title">Closing the Distance...</div>
+            <div class="map-svg-wrap">
+                <svg viewBox="0 0 800 400" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Simplified world map background -->
+                    <rect width="800" height="400" fill="#16213e" rx="15"/>
+
+                    <!-- Europe outline -->
+                    <path d="M 160 120 L 180 100 L 220 95 L 250 100 L 260 120 L 270 140 L 260 160
+                             L 240 170 L 220 200 L 200 210 L 190 200 L 180 190 L 170 170 L 160 150 Z"
+                          fill="#2a3f5f" stroke="#3a5f8f" stroke-width="1"/>
+
+                    <!-- Italy boot shape -->
+                    <path d="M 215 155 L 220 165 L 225 180 L 222 195 L 218 205 L 215 200 L 213 190 L 212 175 L 213 165 Z"
+                          fill="#3a6f9f" stroke="#5a9fcf" stroke-width="1"/>
+
+                    <!-- Asia / Korea region -->
+                    <path d="M 520 80 L 580 70 L 640 80 L 680 100 L 700 130 L 690 160
+                             L 670 180 L 640 190 L 600 185 L 570 170 L 550 150 L 530 120 Z"
+                          fill="#2a3f5f" stroke="#3a5f8f" stroke-width="1"/>
+
+                    <!-- Korean peninsula -->
+                    <path d="M 630 120 L 635 130 L 640 145 L 638 160 L 632 170 L 628 165 L 626 150 L 627 135 Z"
+                          fill="#3a6f9f" stroke="#5a9fcf" stroke-width="1"/>
+
+                    <!-- Italy dot -->
+                    <circle cx="218" cy="180" class="map-dot" id="dot-italy"/>
+                    <text x="190" y="230" class="map-label">Italy &#x1F1EE;&#x1F1F9;</text>
+
+                    <!-- Korea dot -->
+                    <circle cx="632" cy="150" class="map-dot" id="dot-korea"/>
+                    <text x="610" y="200" class="map-label">Korea &#x1F1F0;&#x1F1F7;</text>
+
+                    <!-- Flight path -->
+                    <path id="flight-path" class="flight-path"
+                          d="M 218 180 Q 420 60 632 150"/>
+
+                    <!-- Plane -->
+                    <text id="flight-plane" class="plane-icon" font-size="28">&#9992;&#65039;</text>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 3. CAMERA FLASH ===== -->
+    <div id="flash-screen" class="screen"></div>
+
+    <!-- ===== 4. MAIN SCREEN ===== -->
+    <div id="main-screen" class="screen">
+        <div class="main-bg-pattern"></div>
+        <div class="floating-hearts" id="floating-hearts"></div>
+
+        <div class="content-wrapper">
+            <!-- Header -->
+            <div class="anniversary-header">
+                <h1>Happy 1st Anniversary</h1>
+                <div class="date">March 13, 2025 - March 13, 2026</div>
+                <div class="header-line"></div>
+            </div>
+
+            <!-- Polaroid Photos -->
+            <div class="polaroid-section" id="polaroid-section">
+                <div class="polaroid" style="--rotation: -5deg; --tape-rotation: -3deg;" data-delay="0">
+                    <div class="tape"></div>
+                    <img src="photo1.jpg" alt="Our memory">
+                    <div class="polaroid-caption">Our first meet &#10084;</div>
+                </div>
+                <div class="polaroid" style="--rotation: 3deg; --tape-rotation: 5deg;" data-delay="300">
+                    <div class="tape"></div>
+                    <img src="photo2.jpg" alt="Our memory">
+                    <div class="polaroid-caption">So happy together</div>
+                </div>
+                <div class="polaroid" style="--rotation: -3deg; --tape-rotation: -2deg;" data-delay="600">
+                    <div class="tape"></div>
+                    <img src="photo3.jpg" alt="Our memory">
+                    <div class="polaroid-caption">I love you</div>
+                </div>
+                <div class="polaroid" style="--rotation: 4deg; --tape-rotation: 2deg;" data-delay="900">
+                    <div class="tape"></div>
+                    <img src="photo4.jpg" alt="Our memory">
+                    <div class="polaroid-caption">Forever us</div>
+                </div>
+            </div>
+
+            <!-- Film Strip Video -->
+            <div class="film-section">
+                <div class="film-section-title">&#127902; Our BnB Memories</div>
+                <div class="film-strip-container" id="film-strip">
+                    <video id="bnb-vid" muted loop playsinline>
+                        <source src="bnb-video.mp4" type="video/mp4">
+                    </video>
+                    <div class="film-label">A scene from our story...</div>
+                </div>
+            </div>
+
+            <!-- Letter Section -->
+            <div class="letter-section">
+                <div class="letter-container" id="letter-container">
+                    <div class="letter-text" id="letter-text"></div>
+                </div>
+            </div>
+
+            <!-- Secret Hearts -->
+            <div class="hearts-section">
+                <div style="text-align: center;">
+                    <button class="secret-heart-btn" onclick="toggleHeartMsg(0)">&#128151;</button>
+                    <div class="heart-message" id="heart-msg-0">You found a secret! I love you more than pizza! &#127829;</div>
+                </div>
+                <div style="text-align: center;">
+                    <button class="secret-heart-btn" onclick="toggleHeartMsg(1)">&#128151;</button>
+                    <div class="heart-message" id="heart-msg-1">Secret 2: I miss you so much every day! &#129402;</div>
+                </div>
+                <div style="text-align: center;">
+                    <button class="secret-heart-btn" onclick="toggleHeartMsg(2)">&#128151;</button>
+                    <div class="heart-message" id="heart-msg-2">Secret 3: You are my favourite person in the whole world! &#127758;&#10084;&#65039;</div>
+                </div>
+            </div>
+
+            <!-- Hidden Gift -->
+            <div class="gift-trigger">
+                <button class="gift-btn" onclick="openGift()">
+                    &#127873; Tap here for a special surprise...
+                </button>
+            </div>
+        </div>
+
+        <!-- Music Player -->
+        <div class="music-player">
+            <button class="music-toggle" id="music-toggle" onclick="toggleMusic()">
+                <div class="music-bars">
+                    <div class="music-bar" style="height: 6px;"></div>
+                    <div class="music-bar" style="height: 12px;"></div>
+                    <div class="music-bar" style="height: 8px;"></div>
+                    <div class="music-bar" style="height: 14px;"></div>
+                </div>
+            </button>
+        </div>
+
+        <!-- Scroll indicator -->
+        <div class="scroll-indicator" id="scroll-indicator">
+            <span>&#8595; scroll down &#8595;</span>
+        </div>
+    </div>
+
+    <!-- ===== GIFT OVERLAY ===== -->
+    <div class="gift-overlay" id="gift-overlay" onclick="closeGift(event)">
+        <div>
+            <div class="gift-image-wrap">
+                <img src="drawing.jpg" alt="My drawing for you">
+                <button class="gift-close" onclick="closeGift(event)">&#10005;</button>
+            </div>
+            <div class="gift-label">I drew this for you &#10084;&#65039;</div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SOUND SYNTHESIS (Web Audio API) =====
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playCameraSound() {
+            // Mechanical click
+            const clickBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.15, audioCtx.sampleRate);
+            const clickData = clickBuffer.getChannelData(0);
+            for (let i = 0; i < clickData.length; i++) {
+                const t = i / audioCtx.sampleRate;
+                // Sharp transient click
+                clickData[i] = (Math.random() * 2 - 1) * Math.exp(-t * 60) * 0.5;
+                // Add a mechanical resonance
+                clickData[i] += Math.sin(t * 2000) * Math.exp(-t * 40) * 0.3;
+            }
+            const clickSource = audioCtx.createBufferSource();
+            clickSource.buffer = clickBuffer;
+            const clickGain = audioCtx.createGain();
+            clickGain.gain.value = 0.4;
+            clickSource.connect(clickGain);
+            clickGain.connect(audioCtx.destination);
+            clickSource.start(audioCtx.currentTime);
+
+            // Shutter sound (slightly delayed)
+            setTimeout(() => {
+                const shutterBuffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.08, audioCtx.sampleRate);
+                const shutterData = shutterBuffer.getChannelData(0);
+                for (let i = 0; i < shutterData.length; i++) {
+                    const t = i / audioCtx.sampleRate;
+                    shutterData[i] = (Math.random() * 2 - 1) * Math.exp(-t * 80) * 0.3;
+                    shutterData[i] += Math.sin(t * 4000) * Math.exp(-t * 50) * 0.15;
+                }
+                const shutterSource = audioCtx.createBufferSource();
+                shutterSource.buffer = shutterBuffer;
+                const shutterGain = audioCtx.createGain();
+                shutterGain.gain.value = 0.3;
+                shutterSource.connect(shutterGain);
+                shutterGain.connect(audioCtx.destination);
+                shutterSource.start(audioCtx.currentTime);
+            }, 80);
+        }
+
+        function playTransitionSound() {
+            // Soft chime / twinkle sound
+            const osc1 = audioCtx.createOscillator();
+            const osc2 = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc1.frequency.exponentialRampToValueAtTime(1200, audioCtx.currentTime + 0.15);
+
+            osc2.type = 'sine';
+            osc2.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            osc2.frequency.exponentialRampToValueAtTime(1600, audioCtx.currentTime + 0.2);
+
+            gainNode.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.4);
+
+            osc1.connect(gainNode);
+            osc2.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+
+            osc1.start(audioCtx.currentTime);
+            osc2.start(audioCtx.currentTime + 0.05);
+            osc1.stop(audioCtx.currentTime + 0.4);
+            osc2.stop(audioCtx.currentTime + 0.45);
+        }
+
+        function playGiftRevealSound() {
+            // Magic sparkle ascending
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.value = 600 + i * 200;
+                    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+                    osc.start();
+                    osc.stop(audioCtx.currentTime + 0.3);
+                }, i * 80);
+            }
+        }
+
+        // ===== INITIALIZATION =====
+        // Create sparkles on start screen
+        (function createStartSparkles() {
+            const container = document.getElementById('start-sparkles');
+            for (let i = 0; i < 50; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = Math.random() * 100 + '%';
+                sparkle.style.top = Math.random() * 100 + '%';
+                sparkle.style.animationDuration = (3 + Math.random() * 5) + 's';
+                sparkle.style.animationDelay = Math.random() * 5 + 's';
+                sparkle.style.width = (2 + Math.random() * 3) + 'px';
+                sparkle.style.height = sparkle.style.width;
+                container.appendChild(sparkle);
+            }
+        })();
+
+        // Create VRChat stars
+        (function createVRCStars() {
+            const container = document.getElementById('vrc-stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'vrc-star';
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                star.style.width = (1 + Math.random() * 3) + 'px';
+                star.style.height = star.style.width;
+                container.appendChild(star);
+            }
+        })();
+
+        // Create floating hearts for main page
+        (function createFloatingHearts() {
+            const container = document.getElementById('floating-hearts');
+            const hearts = ['\u2764', '\uD83D\uDC95', '\uD83D\uDC97', '\u2665'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'float-heart';
+                heart.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+                heart.style.left = Math.random() * 100 + '%';
+                heart.style.fontSize = (15 + Math.random() * 20) + 'px';
+                heart.style.animationDuration = (8 + Math.random() * 12) + 's';
+                heart.style.animationDelay = Math.random() * 15 + 's';
+                container.appendChild(heart);
+            }
+        })();
+
+        // ===== SCREEN TRANSITIONS =====
+        function switchScreen(hideId, showId, callback) {
+            const hideEl = document.getElementById(hideId);
+            const showEl = document.getElementById(showId);
+            hideEl.classList.remove('active');
+            setTimeout(() => {
+                showEl.classList.add('active');
+                if (callback) callback();
+            }, 300);
+        }
+
+        // ===== VRC HEARTS =====
+        function spawnVRCHearts() {
+            const screen = document.getElementById('vrchat-screen');
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'vrc-heart';
+                    heart.textContent = '\u2764\uFE0F';
+                    heart.style.left = (30 + Math.random() * 40) + '%';
+                    heart.style.top = (40 + Math.random() * 20) + '%';
+                    heart.style.fontSize = (16 + Math.random() * 16) + 'px';
+                    screen.appendChild(heart);
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 250);
+            }
+        }
+
+        // ===== MAIN JOURNEY =====
+        function startJourney() {
+            // Resume audio context (browser requirement)
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
+            // 1. VRChat intro
+            const vrchatSound = document.getElementById('vrchat-sound');
+            vrchatSound.volume = 0.5;
+            vrchatSound.play().catch(() => {});
+
+            playTransitionSound();
+            switchScreen('start-screen', 'vrchat-screen', () => {
+                // Animate loading bar
+                let progress = 0;
+                const loadingFill = document.getElementById('vrc-loading');
+                const loadInterval = setInterval(() => {
+                    progress += 2;
+                    loadingFill.style.width = progress + '%';
+                    if (progress >= 100) clearInterval(loadInterval);
+                }, 60);
+
+                // Spawn hearts between avatars
+                setTimeout(() => spawnVRCHearts(), 1500);
+            });
+
+            // 2. Flight map (after 4 seconds)
+            setTimeout(() => {
+                vrchatSound.pause();
+                playTransitionSound();
+                switchScreen('vrchat-screen', 'map-screen', () => {
+                    // Start flight animation
+                    setTimeout(() => {
+                        document.getElementById('flight-path').classList.add('animate');
+                        animatePlane();
+                        document.getElementById('dot-italy').classList.add('pulse');
+                        setTimeout(() => {
+                            document.getElementById('dot-korea').classList.add('pulse');
+                        }, 2500);
+                    }, 500);
+                });
+            }, 4500);
+
+            // 3. Camera flash + transition to main (after 9 seconds)
+            setTimeout(() => {
+                playCameraSound();
+                switchScreen('map-screen', 'flash-screen', () => {
+                    // Flash fades out, main page appears
+                    setTimeout(() => {
+                        playTransitionSound();
+                        switchScreen('flash-screen', 'main-screen', () => {
+                            // Start background music
+                            const bgMusic = document.getElementById('bg-music');
+                            bgMusic.volume = 0.4;
+                            bgMusic.play().catch(() => {});
+                            document.getElementById('music-toggle').classList.add('playing');
+                            musicPlaying = true;
+
+                            // Show scroll indicator
+                            setTimeout(() => {
+                                document.getElementById('scroll-indicator').classList.add('show');
+                                setTimeout(() => {
+                                    document.getElementById('scroll-indicator').classList.remove('show');
+                                }, 4000);
+                            }, 1500);
+
+                            // Initialize scroll-based animations
+                            initScrollAnimations();
+                        });
+                    }, 500);
+                });
+            }, 9000);
+        }
+
+        // ===== PLANE ANIMATION =====
+        function animatePlane() {
+            const plane = document.getElementById('flight-plane');
+            const path = document.getElementById('flight-path');
+            const pathLength = path.getTotalLength();
+            let progress = 0;
+
+            function animate() {
+                if (progress >= 1) return;
+                progress += 0.008;
+                const point = path.getPointAtLength(progress * pathLength);
+                plane.setAttribute('x', point.x - 14);
+                plane.setAttribute('y', point.y - 14);
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // ===== SCROLL-BASED ANIMATIONS =====
+        function initScrollAnimations() {
+            const mainScreen = document.getElementById('main-screen');
+            const polaroids = document.querySelectorAll('.polaroid');
+            const filmStrip = document.getElementById('film-strip');
+            const letterContainer = document.getElementById('letter-container');
+            let letterStarted = false;
+            let polaroidSoundPlayed = new Set();
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const el = entry.target;
+
+                        // Polaroids
+                        if (el.classList.contains('polaroid') && !el.classList.contains('visible')) {
+                            const delay = parseInt(el.getAttribute('data-delay') || 0);
+                            setTimeout(() => {
+                                el.classList.add('visible');
+                                const idx = Array.from(polaroids).indexOf(el);
+                                if (!polaroidSoundPlayed.has(idx)) {
+                                    playCameraSound();
+                                    polaroidSoundPlayed.add(idx);
+                                }
+                            }, delay);
+                        }
+
+                        // Film strip
+                        if (el.id === 'film-strip' && !el.classList.contains('visible')) {
+                            el.classList.add('visible');
+                            playTransitionSound();
+                            const vid = document.getElementById('bnb-vid');
+                            vid.play().catch(() => {});
+                        }
+
+                        // Letter
+                        if (el.id === 'letter-container' && !letterStarted) {
+                            letterStarted = true;
+                            playTransitionSound();
+                            startLetterAnimation();
+                        }
+                    }
+                });
+            }, { threshold: 0.2, root: mainScreen });
+
+            polaroids.forEach(p => observer.observe(p));
+            observer.observe(filmStrip);
+            observer.observe(letterContainer);
+        }
+
+        // ===== LETTER ANIMATION =====
+        const letterContent = `안녕 자기야,
+
+지금 내 마음은 너무 많은 감정으로 가득 차 있어서 어떤 말로 시작해야 할지 모르겠어. 설레기도 하고, 벅차기도 하고, 동시에 너무 행복해. 지난 1년 동안 우리가 겪은 모든 일을 떠올리면, 나는 스스로가 조금 자랑스러워. 나는 포기하지 않았으니까. 너를 포기하지 않았고, 나 자신도 포기하지 않았어.
+
+하지만 우리의 이야기는 사실 2년 전, VRChat에서 시작됐지.
+
+그때 나는 그 순간이 내 인생을 완전히 바꿔 놓을 거라고는 전혀 몰랐어. 나는 그냥 한국어를 한번 말해보고 싶어서 시도해보고 있었어. 모든 게 조금 낯설고 벅찼고, 솔직히 내가 뭘 하고 있는지도 잘 몰랐어. 그래도 오래전부터 한국어를 배우고 싶었기 때문에 그냥 해보고 있었지.
+
+그런데 그 속에서, 나는 너를 만났어.
+
+나는 아직도 기억해. 수많은 사람들 사이에서 네 목소리가 유독 내 귀에 들어왔던 순간을. 네 목소리를 처음 들었을 때, 내 마음이 갑자기 따뜻해지고 편안해졌어. 심지어 네 이름을 보는 것만으로도, 왠지 너와 더 가까워지고 싶다는 느낌이 들었어. 너의 목소리는 처음부터 나를 편안하게 해줬어.
+
+우리는 조금씩 서로를 알아가기 시작했지. 함께 시간을 보내고, 장난스럽게 플러팅도 하고, 음악도 같이 듣고, 서로 좋아하는 것과 싫어하는 것들을 이야기했어. 그리고 나는 어느 순간 깨달았어. 내가 하루하루 조금씩 너에게 마음을 더 열고 있다는 걸.
+
+멀리 떨어진 사람을 사랑한다는 건 솔직히 무서운 일이었어. 하지만 그런 두려움 속에서도, 너는 용기를 내서 먼저 내게 마음을 고백해줬지. 그 순간에 나는 정말 고마웠어. 그리고 지금도 그 순간이 너무 소중해.
+
+내가 결국 너를 만나기 위해 비행기에 올랐던 그날은, 아마 평생 잊지 못할 거야.
+
+비행기 안에서 혼자 앉아 있었을 때, 너무 설레고 감정이 벅차서 손이 떨렸어. 그 순간 나는 깨달았어. 사랑이 나를 이렇게까지 강하게 만들 수 있다는 걸. 나는 너를 만나기 위해 세상을 가로질러 가고 있었고, 이상하게도 그게 세상에서 가장 자연스러운 일처럼 느껴졌어.
+
+공항 터미널을 나오기 전 마지막 5분은 정말 영화 같았어. 심장이 너무 빨리 뛰어서 터질 것 같았어. 심지어 너에게 조금 더 예쁘게 보이고 싶어서 안경도 안 쓰고 있었어.
+
+그때 누군가 내 이름을 불렀어.
+
+나는 바로 고개를 돌렸어.
+
+그리고 거기에… 네가 있었어.
+
+내가 좋아하는 색의 꽃을 들고, 나를 기다리고 서 있는 너.
+
+그 순간 주변의 모든 것이 사라진 것 같았어. 내 머릿속은 완전히 하얘졌고, 나는 그냥 너만 바라보고 있었어. 이 순간이 정말 현실인지 믿으려고 노력하면서.
+
+그동안 우리가 화면 너머로 이야기하던 모든 밤들, 그 긴 거리, 기다림… 그 모든 것을 지나서 우리는 결국 같은 곳에 서 있었어.
+
+내 머릿속에서는 계속 같은 말이 반복되고 있었어.
+
+"우리가 해냈다."
+
+그 순간부터 너와 함께한 모든 시간은 내 삶을 더 밝게 만들었어. 내 세상은 더 따뜻해졌고, 더 의미 있어졌어. 우리가 함께 만든 추억들은 내 인생에서 가장 소중한 것들 중 하나야.
+
+하지만 내 마음속에 가장 깊이 남아 있는 순간이 하나 있어.
+
+지난 1년 동안 너는 내 많은 감정을 봤지. 내가 웃는 모습도, 두려워하는 모습도, 울던 순간들도. 하지만 내가 정말로 "나는 사랑받을 가치가 있는 사람이구나"라고 느꼈던 순간은 그 BnB 밖으로 나갔던 그날이야.
+
+나는 감정이 너무 무너질 것 같아서 너에게서 잠시 멀어지려고 했어. 그런 모습을 너에게 보여주고 싶지 않았거든. 하지만 마음 한편에서는 네가 나를 따라와 주기를 바라고 있었어.
+
+그 거리를 혼자 걸어가면서 나는 너무 외롭고, 내가 잘못된 사람인 것처럼 느껴졌어.
+
+그때 들렸어.
+
+네 슬리퍼 소리. 네가 뛰어오는 소리.
+
+이상하게도 그 소리는 내가 바로 알아들을 수 있는 소리였어. 그리고 그 순간 내 마음속에 있던 무거움이 조금씩 사라지기 시작했어.
+
+내가 돌아가라고 말했는데도, 너는 내 옆에 남아 있었어.
+
+너는 떠나지 않았어.
+
+그 순간 나는 처음으로 느꼈어. 어쩌면 나도… 사랑받을 가치가 있는 사람일지도 모른다고.
+
+너도 알다시피 나는 추억을 기록하는 걸 정말 좋아해. 가끔은 내가 너무 많이 기록해서 귀찮게 느껴질 수도 있겠지만, 나에게는 그 사진들과 영상들이 우리의 이야기를 담고 있는 작은 보물 같아.
+
+그날은 아마 내가 직접 아무것도 기록하지 못했던 거의 유일한 순간이었을 거야. 너무 부끄럽고, 너무 감정적이었거든. 하지만 다행히도 너가 그 순간을 기록해줬지.
+
+그리고 지금 그 짧은 영상은 나에게 정말 소중한 보물이 되었어. 나는 가끔 잠들기 전에 그 영상을 보기도 해. 그 순간이 정말로 있었던 일이라는 걸 다시 느끼기 위해서.
+
+나는 우리가 서로를 완성해 주는 존재라고 느낄 때가 많아. 내가 무언가 부족할 때, 너는 그 빈자리를 정확히 채워주는 사람 같아.
+
+이 1년 동안 나는 너에게 수백 개의 메시지와 편지를 썼을 거야. 하지만 이 편지는 조금 더 특별해. 왜냐하면 오늘은 우리가 함께 이루어낸 첫 번째 큰 목표이기 때문이야.
+
+두 번째로 한국에 갔을 때 우리는 함께 사는 삶이 어떤 느낌일지 조금 경험해 봤지. 물론 쉽지만은 않았어. 좋은 순간들도 있었지만, 힘든 순간들도 있었어. 우리는 울기도 했고, 다투기도 했고, 서로를 이해하지 못할 때도 있었어.
+
+하지만 우리는 평범한 일상도 함께 했어. 같이 일어나고, 같이 스킨케어를 하고, 서로의 나라 음식을 만들어 주고, 영화를 보고, 작은 것에 웃고, 미래에 대해 이야기했어.
+
+그리고 그 모든 순간 속에서도 우리는 포기하지 않았어.
+
+그게 내가 가장 감사한 부분이야.
+
+좋은 기억이든 힘든 기억이든, 그 모든 경험이 우리를 더 강하게 만들었어. 우리의 추억들을 다시 보면, 네가 나를 얼마나 아끼는지, 얼마나 노력하는지, 그리고 우리 미래를 위해 얼마나 진심인지 느낄 수 있어.
+
+가끔 내가 너무 집착하는 것처럼 보일 수도 있고, 내가 너무 많이 사랑하는 것처럼 느껴질 수도 있어. 하지만 사실은… 너는 그런 사랑을 받을 자격이 있는 사람이야.
+
+나는 네가 하루하루 성장하는 모습을 보면서 정말 자랑스럽게 생각해.
+
+네가 내 옆에 있는 한, 언제든지 기댈 수 있는 가슴이 여기 있을 거야. 네가 가장 힘든 순간에라도 쉴 수 있는 곳이 되어 줄게. 따뜻하게 머리를 쓰다듬어 주고, 집에 온 것처럼 느끼게 해 줄 긴 포옹도 항상 준비되어 있을 거야.
+
+나는 완벽하지 않을 거야. 실수도 하고, 때로는 실패할 수도 있어. 하지만 한 가지는 약속할게. 나는 항상 너를 위해 최선을 다할 거야.
+
+우리 함께 미래를 만들어 가자. 힘든 날에도 서로를 선택하자. 그리고 절대 서로를 포기하지 말자.
+
+그리고 기억해 줘. 내 옆에는 항상 작은 알레시아도 함께 있어. 우리 둘 다 너를 응원하고 있어.
+
+나는 네가 정말 자랑스러워. 지금의 너도, 앞으로 더 성장할 너도.
+
+내가 미래를 상상할 때, 항상 그 안에는 네가 있어. 언젠가 너를 내 남편으로 상상하고, 우리의 아이들의 소중한 아빠가 된 모습을 떠올려.
+
+그리고 나는 어떤 일이 있어도 그 모든 순간을 네 손을 잡고 함께 지나가고 싶어.
+
+우리의 1주년을 축하해, 내 사랑.
+
+너의 별, 알레시아`;
+
+        function startLetterAnimation() {
+            const letterEl = document.getElementById('letter-text');
+            const mainScreen = document.getElementById('main-screen');
+            letterEl.innerHTML = '';
+
+            // Wrap each character in a span
+            const chars = [];
+            for (let i = 0; i < letterContent.length; i++) {
+                const span = document.createElement('span');
+                span.className = 'char';
+                if (letterContent[i] === '\n') {
+                    letterEl.appendChild(document.createElement('br'));
+                    continue;
+                }
+                span.textContent = letterContent[i];
+                letterEl.appendChild(span);
+                chars.push(span);
+            }
+
+            // Reveal characters based on scroll position
+            let revealed = 0;
+            const charsPerScroll = 3; // characters revealed per scroll pixel
+
+            function onScroll() {
+                const rect = letterEl.getBoundingClientRect();
+                const mainRect = mainScreen.getBoundingClientRect();
+                // How far letter has scrolled into view
+                const scrolled = mainRect.height - rect.top;
+                const targetChars = Math.min(Math.floor(scrolled * charsPerScroll), chars.length);
+
+                while (revealed < targetChars) {
+                    chars[revealed].classList.add('visible');
+                    revealed++;
+                }
+            }
+
+            mainScreen.addEventListener('scroll', onScroll);
+            onScroll(); // Initial check
+        }
+
+        // ===== MUSIC TOGGLE =====
+        let musicPlaying = false;
+        function toggleMusic() {
+            const bgMusic = document.getElementById('bg-music');
+            const toggleBtn = document.getElementById('music-toggle');
+
+            if (musicPlaying) {
+                bgMusic.pause();
+                toggleBtn.classList.remove('playing');
+            } else {
+                bgMusic.play().catch(() => {});
+                toggleBtn.classList.add('playing');
+            }
+            musicPlaying = !musicPlaying;
+        }
+
+        // ===== SECRET HEARTS =====
+        function toggleHeartMsg(idx) {
+            playTransitionSound();
+            const msg = document.getElementById('heart-msg-' + idx);
+            msg.classList.toggle('show');
+        }
+
+        // ===== GIFT =====
+        function openGift() {
+            playGiftRevealSound();
+            document.getElementById('gift-overlay').classList.add('active');
+            spawnConfetti();
+        }
+
+        function closeGift(e) {
+            if (e.target === document.getElementById('gift-overlay') || e.target.classList.contains('gift-close')) {
+                document.getElementById('gift-overlay').classList.remove('active');
+            }
+        }
+
+        function spawnConfetti() {
+            const colors = ['#ff6b8a', '#ffd4e0', '#ff8fab', '#ffb3c6', '#ffc8dd', '#ffafcc', '#a2d2ff', '#bde0fe', '#cdb4db'];
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (5 + Math.random() * 10) + 'px';
+                    confetti.style.height = (5 + Math.random() * 10) + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                    confetti.style.animationDuration = (2 + Math.random() * 3) + 's';
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 30);
+            }
+        }
+    </script>
+</body>
+</html>
